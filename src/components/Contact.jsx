@@ -1,8 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
   const ref = useRef(null);
+  const formRef = useRef(null); // Ref added specifically to handle the HTML form element data extraction safely
+  const [isSending, setIsSending] = useState(false);
   
   // React Form State tracking
   const [formData, setFormData] = useState({
@@ -30,21 +33,35 @@ const Contact = () => {
     }));
   };
 
-  // Handle form submission logic
+  // Handle form submission logic using EmailJS
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevents the painful page-refresh crash
+    e.preventDefault(); 
 
     if (!formData.permission) {
       alert("Please accept the contact permission checkbox.");
       return;
     }
 
-    // Process your form payload safely here (e.g., Axios, EmailJS, Fetch API)
-    console.log("Form Data Submitted Successfully:", formData);
-    alert(`Thanks ${formData.firstName}! Message captured.`);
-    
-    // Optional Reset
-    setFormData({ firstName: '', lastName: '', email: '', message: '', permission: false });
+    setIsSending(true);
+
+    // Replace these placeholder strings with your actual keys from your EmailJS Dashboard
+    const SERVICE_ID = "YOUR_SERVICE_ID";
+    const TEMPLATE_ID = "YOUR_TEMPLATE_ID";
+    const PUBLIC_KEY = "YOUR_PUBLIC_KEY";
+
+    emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, PUBLIC_KEY)
+      .then((result) => {
+        alert(`Thanks ${formData.firstName}! Your message was successfully sent to Jafer's inbox.`);
+        // Reset local state variables safely
+        setFormData({ firstName: '', lastName: '', email: '', message: '', permission: false });
+      })
+      .catch((error) => {
+        console.error("EmailJS Error details:", error);
+        alert("Oops! Something went sideways. Please email skjaferali8@gmail.com directly.");
+      })
+      .finally(() => {
+        setIsSending(false);
+      });
   };
 
   return (
@@ -63,7 +80,7 @@ const Contact = () => {
         </h1>
       </motion.div>
 
-      {/* Form Card Overlay (Upgraded from AOS to Framer Motion built-in viewport engine) */}
+      {/* Form Card Overlay */}
       <div className="relative z-10 w-full flex justify-end items-end">
         <motion.div 
           initial={{ opacity: 0, y: 50 }}
@@ -76,7 +93,7 @@ const Contact = () => {
             Reach Us
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-12 md:gap-16 w-full">
+          <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-12 md:gap-16 w-full">
             <div className="flex flex-col md:flex-row gap-12 md:gap-20 w-full">
               
               {/* Left Column */}
@@ -85,6 +102,7 @@ const Contact = () => {
                   <input 
                     type="text" 
                     id="firstName" 
+                    name="firstName" // Critical mapping for EmailJS parsing templates
                     value={formData.firstName}
                     onChange={handleChange}
                     placeholder="First Name" 
@@ -96,6 +114,7 @@ const Contact = () => {
                   <input 
                     type="text" 
                     id="lastName" 
+                    name="lastName" // Critical mapping for EmailJS parsing templates
                     value={formData.lastName}
                     onChange={handleChange}
                     placeholder="Last Name" 
@@ -107,6 +126,7 @@ const Contact = () => {
                   <input 
                     type="email" 
                     id="email" 
+                    name="email" // Critical mapping for EmailJS parsing templates
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Email" 
@@ -121,6 +141,7 @@ const Contact = () => {
                 <div className="relative h-full flex flex-col">
                   <textarea 
                     id="message" 
+                    name="message" // Critical mapping for EmailJS parsing templates
                     value={formData.message}
                     onChange={handleChange}
                     placeholder="Type your message here" 
@@ -160,9 +181,10 @@ const Contact = () => {
                   
                   <button 
                     type="submit" 
-                    className="px-8 py-3 rounded-full border border-white/40 text-white font-bold flex items-center justify-center gap-3 hover:bg-white hover:text-[#ff2a2a] transition-all duration-300 group whitespace-nowrap self-start sm:self-auto"
+                    disabled={isSending}
+                    className="px-8 py-3 rounded-full border border-white/40 text-white font-bold flex items-center justify-center gap-3 hover:bg-white hover:text-[#ff2a2a] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 group whitespace-nowrap self-start sm:self-auto"
                   >
-                    Send
+                    {isSending ? "Sending..." : "Send"}
                     <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>

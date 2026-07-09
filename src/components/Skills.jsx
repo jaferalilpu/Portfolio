@@ -4,20 +4,16 @@ import { motion } from 'framer-motion';
 const Skills = () => {
   const skillsData = [
     {
-      category: 'Frontend Development',
-      skills: ['React', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3', 'Tailwind CSS', 'Bootstrap'],
+      category: 'Full Stack Web Development',
+      skills: ['React', 'JavaScript', 'Node.js','Java','Mongo DB','Rest API/JWT Auth','MY SQL', 'HTML5', 'CSS3', 'Tailwind CSS', 'Bootstrap'],
     },
     {
-      category: 'Backend Development',
-      skills: ['Node.js', 'Express.js', 'Java', 'Python', 'REST APIs', 'JWT Auth', 'MySQL', 'MongoDB'],
+      category: 'DevOps & Cloud',
+      skills: ['AWS', 'Docker', 'Jenkins', 'Ansible', 'CI/CD Pipelines', 'Microservices Architecture', 'Linux','Apache/Kafka','Git/Git Hub'],
     },
     {
-      category: 'AI & Machine Learning',
-      skills: ['Machine Learning', 'NLP', 'Generative AI', 'LLMs', 'Computer Vision', 'Prompt Engineering'],
-    },
-    {
-      category: 'Tools & Cloud',
-      skills: ['Git', 'GitHub', 'Docker', 'Postman', 'Linux', 'CI/CD', 'AWS','Figma'],
+      category: 'AI Tools & Automation',
+      skills: ['n8n', 'Selinium Webdriver', 'Workflow Automation', 'LLMs', 'Regression Automation', 'Prompt Engineering'],
     },
   ];
  

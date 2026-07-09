@@ -39,7 +39,7 @@ const Navbar = () => {
               isOpen || !isScrolled ? 'text-white' : 'text-gray-900'
             }`}
           >
-            Sushmita <span className="text-[#ff2a2a]">.</span>
+            Shaik Jafer Ali <span className="text-[#ff2a2a]">.</span>
           </a>
         </div>
 
