@@ -52,6 +52,7 @@ We utilize a dedicated netlify.toml routing gateway. This tells modern browsers 
     Cache-Control = "public, max-age=0, must-revalidate"
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
+    
 🛸 Automated CI/CD Pipeline Workflow
 Our continuous deployment engine triggers automatically on every code push to the main branch.
 [1. Checkout Code] ──► [2. Build Docker Image] ──► [3. Run Automation Tests] ──► [4. Deploy to Netlify]
