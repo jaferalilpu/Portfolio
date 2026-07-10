@@ -1,12 +1,8 @@
 pipeline {
     agent any
     
-    tools {
-        // Match the valid type and your configured tool name perfectly
-        dockerTool 'docker-cli'
-    }
-    
     environment {
+        // Linked directly to your unique project: singular-unicorn-e54e4e
         NETLIFY_SITE_ID = 'fcf8a461-6141-427c-b430-6434eca95f0d'
     }
     
