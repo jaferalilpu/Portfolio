@@ -2,8 +2,8 @@ pipeline {
     agent any
     
     tools {
-        // FIXED: Using the exact standard 'docker' identifier block
-        docker 'docker-cli'
+        // Match the valid type and your configured tool name perfectly
+        dockerTool 'docker-cli'
     }
     
     environment {
