@@ -35,14 +35,13 @@ pipeline {
                     sh 'docker cp temp-container:/usr/share/nginx/html ./dist'
                     sh 'docker rm temp-container'
                     
-                    // Step B: Use an isolated Node container to deploy to Netlify
-                    // Added --no-build to completely bypass Netlify's internal build engine triggers
+                    // Step B: Deploy using the netlify.toml configuration file settings from the workspace root
                     sh '''
                         docker run --rm \
-                        -v "$(pwd)/dist:/app/dist" \
+                        -v "$(pwd):/app" \
                         -w /app \
                         node:20-alpine \
-                        sh -c "npm install -g netlify-cli && netlify deploy --prod --dir=dist --auth=$NETLIFY_TOKEN --site=$NETLIFY_SITE_ID --no-build"
+                        sh -c "npm install -g netlify-cli && netlify deploy --prod --auth=$NETLIFY_TOKEN --site=$NETLIFY_SITE_ID --no-build"
                     '''
                 }
             }
