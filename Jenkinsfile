@@ -30,18 +30,19 @@ pipeline {
             steps {
                 echo 'Streaming production bundle to Netlify Edge CDN via isolated container...'
                 withCredentials([string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_TOKEN')]) {
-                    // Extract the compiled /dist folder out of your portfolio-app image first
+                    // Step A: Extract the compiled build files out of your custom Docker image
                     sh 'docker create --name temp-container portfolio-app:latest'
                     sh 'docker cp temp-container:/usr/share/nginx/html ./dist'
                     sh 'docker rm temp-container'
                     
-                    // Deploy using an official node image container so 'npm' and 'netlify' run safely isolated
+                    // Step B: Use an isolated Node container to deploy to Netlify
+                    // Note: -c "" forces Netlify to skip its default UI build framework commands
                     sh '''
                         docker run --rm \
                         -v "$(pwd)/dist:/app/dist" \
                         -w /app \
                         node:20-alpine \
-                        sh -c "npm install -g netlify-cli && netlify deploy --prod --dir=dist --auth=$NETLIFY_TOKEN --site=$NETLIFY_SITE_ID"
+                        sh -c "npm install -g netlify-cli && netlify deploy --prod --dir=dist --auth=$NETLIFY_TOKEN --site=$NETLIFY_SITE_ID -c \\"\\""
                     '''
                 }
             }
