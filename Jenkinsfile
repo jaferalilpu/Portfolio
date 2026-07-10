@@ -36,13 +36,13 @@ pipeline {
                     sh 'docker rm temp-container'
                     
                     // Step B: Use an isolated Node container to deploy to Netlify
-                    // Note: -c "" forces Netlify to skip its default UI build framework commands
+                    // Added --no-build to completely bypass Netlify's internal build engine triggers
                     sh '''
                         docker run --rm \
                         -v "$(pwd)/dist:/app/dist" \
                         -w /app \
                         node:20-alpine \
-                        sh -c "npm install -g netlify-cli && netlify deploy --prod --dir=dist --auth=$NETLIFY_TOKEN --site=$NETLIFY_SITE_ID -c \\"\\""
+                        sh -c "npm install -g netlify-cli && netlify deploy --prod --dir=dist --auth=$NETLIFY_TOKEN --site=$NETLIFY_SITE_ID --no-build"
                     '''
                 }
             }
