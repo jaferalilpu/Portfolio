@@ -1,15 +1,18 @@
 pipeline {
     agent any
     
+    // ADD THIS TOOLS SECTION TO FIX EMULATED CLI CONFLICTS:
+    tools {
+        dockerTool 'docker-cli'
+    }
+    
     environment {
-        // Tied securely to your unique project: singular-unicorn-e54e4e
         NETLIFY_SITE_ID = 'fcf8a461-6141-427c-b430-6434eca95f0d'
     }
     
     stages {
         stage('1. Checkout Code') {
             steps {
-                // Pulls down the latest code repository from your GitHub account
                 checkout scm
             }
         }
@@ -31,7 +34,6 @@ pipeline {
         stage('4. Deploy to Netlify') {
             steps {
                 echo 'Streaming production bundle to Netlify Edge CDN...'
-                // Securely binds the token you just created in the Jenkins dashboard interface
                 withCredentials([string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_TOKEN')]) {
                     sh 'npm install -g netlify-cli'
                     sh 'npm run build'
