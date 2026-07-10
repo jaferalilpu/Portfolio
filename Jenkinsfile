@@ -1,9 +1,9 @@
 pipeline {
     agent any
     
-    // ADD THIS TOOLS SECTION TO FIX EMULATED CLI CONFLICTS:
     tools {
-        dockerTool 'docker-cli'
+        // FIXED: Using the exact standard 'docker' identifier block
+        docker 'docker-cli'
     }
     
     environment {
